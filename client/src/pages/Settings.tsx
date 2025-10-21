@@ -10,9 +10,10 @@ import { Link } from "wouter";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { convertPrice, convertToTWD } from "@/lib/currency";
 
 export default function Settings() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [prices, setPrices] = useState<Record<string, number>>({});
 
   // 從 localStorage 載入價格設定
@@ -122,10 +123,10 @@ export default function Settings() {
                   <div>
                     <Label className="text-base font-semibold">{spec.label}</Label>
                     <p className="text-sm text-muted-foreground mt-1">
-                      每支筆含 {spec.totalMg} mg（約 {spec.totalMl} mL）
+                      {t.perPenContains} {spec.totalMg} mg（{t.approximately} {spec.totalMl} mL）
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      每 0.1mL 含 {spec.mgPer01ml.toFixed(2)} mg
+                      {t.per01mlContains} {spec.mgPer01ml.toFixed(2)} mg
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -136,10 +137,18 @@ export default function Settings() {
                       id={`price-${spec.label}`}
                       type="number"
                       min="1"
-                      max="50000"
-                      step="100"
-                      value={prices[spec.label] !== undefined ? prices[spec.label] : spec.price}
-                      onChange={(e) => handlePriceChange(spec.label, e.target.value)}
+                      max={language === 'en' ? "1634" : "50000"}
+                      step={language === 'en' ? "10" : "100"}
+                      value={
+                        prices[spec.label] !== undefined 
+                          ? Math.round(convertPrice(prices[spec.label], language))
+                          : Math.round(convertPrice(spec.price, language))
+                      }
+                      onChange={(e) => {
+                        const displayValue = e.target.value;
+                        const twdValue = convertToTWD(parseFloat(displayValue), language);
+                        handlePriceChange(spec.label, twdValue.toString());
+                      }}
                       className="text-right"
                     />
                   </div>
@@ -160,8 +169,7 @@ export default function Settings() {
             {/* Info */}
             <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg">
               <p className="text-sm text-muted-foreground">
-                💡 <strong>提示：</strong>價格設定會儲存在瀏覽器中，下次開啟時會自動載入。
-                返回計算器頁面後，系統會使用新的價格進行計算。
+                💡 <strong>{language === 'zh-TW' ? '提示' : 'Hint'}:</strong> {t.settingsHint}
               </p>
             </div>
           </CardContent>

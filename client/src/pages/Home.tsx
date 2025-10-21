@@ -255,8 +255,8 @@ export default function Home() {
                                 <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[100px]">{t.availableVolume}</th>
                                 <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[110px]">{t.per01mlContent}</th>
                                 <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[120px]">{t.price}</th>
-                                <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[110px]">每 0.1mL {t.price}</th>
-                                <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[110px]">每 mg {t.price}</th>
+                                <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[110px]">{t.per01mlCostLabel}</th>
+                                <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[110px]">{t.perMgCostLabel}</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -293,7 +293,7 @@ export default function Home() {
                         <Link href="/settings">
                           <Button variant="outline" size="sm" className="gap-2">
                             <Settings className="w-4 h-4" />
-                            調整{t.specLabel}{t.price}
+                            {language === 'zh-TW' ? `調整${t.specLabel}${t.price}` : `Adjust ${t.specLabel} ${t.price}`}
                           </Button>
                         </Link>
                       </div>

@@ -82,6 +82,10 @@ export interface Translations {
   resetDefaults: string;
   settingsSaved: string;
   settingsReset: string;
+  perPenContains: string;
+  approximately: string;
+  per01mlContains: string;
+  settingsHint: string;
   
   // Units
   mg: string;
@@ -172,12 +176,16 @@ export const translations: Record<Language, Translations> = {
     
     // Settings Page
     settingsTitle: '價格設定',
-    settingsDescription: '更新各規格的價格，系統將使用新價格計算最佳施打劑量',
+    settingsDescription: '更新各規格價格，系統將使用新價格計算最佳劑量',
     backToCalculator: '返回計算器',
     saveSettings: '儲存設定',
     resetDefaults: '恢復預設',
     settingsSaved: '價格設定已儲存',
     settingsReset: '已恢復預設價格',
+    perPenContains: '每支筆含',
+    approximately: '約',
+    per01mlContains: '每 0.1mL 含',
+    settingsHint: '價格設定會儲存在瀏覽器中，下次開啟時會自動載入。返回計算器頁面後，系統會使用新的價格進行計算。',
     
     // Units
     mg: 'mg',
@@ -272,6 +280,10 @@ export const translations: Record<Language, Translations> = {
     resetDefaults: 'Reset Defaults',
     settingsSaved: 'Price settings saved',
     settingsReset: 'Default prices restored',
+    perPenContains: 'Per pen contains',
+    approximately: 'approx.',
+    per01mlContains: 'Per 0.1mL contains',
+    settingsHint: 'Price settings are saved in your browser and will be automatically loaded next time. After returning to the calculator page, the system will use the new prices for calculations.',
     
     // Units
     mg: 'mg',
