@@ -142,13 +142,23 @@ export default function Settings() {
                       max={language === 'en' ? "1634" : "50000"}
                       step={language === 'en' ? "10" : "100"}
                       value={
-                        prices[spec.label] !== undefined 
-                          ? Math.round(convertPrice(prices[spec.label], language))
-                          : Math.round(convertPrice(spec.price, language))
+                        (() => {
+                          const price = prices[spec.label] !== undefined ? prices[spec.label] : spec.price;
+                          if (typeof price !== 'number' || price === null || price === undefined) return '';
+                          const converted = convertPrice(price, language);
+                          return isNaN(converted) ? '' : Math.round(converted);
+                        })()
                       }
                       onChange={(e) => {
                         const displayValue = e.target.value;
-                        const twdValue = convertToTWD(parseFloat(displayValue), language);
+                        if (displayValue === '') {
+                          handlePriceChange(spec.label, '');
+                          return;
+                        }
+                        const numValue = parseFloat(displayValue);
+                        if (isNaN(numValue)) return;
+                        const twdValue = convertToTWD(numValue, language);
+                        if (isNaN(twdValue)) return;
                         handlePriceChange(spec.label, twdValue.toString());
                       }}
                       className="text-right"

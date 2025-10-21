@@ -5,27 +5,25 @@ import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export function ExchangeRateDisplay() {
+  const { language } = useLanguage();
   const [rate, setRate] = useState(getExchangeRate());
   const [loading, setLoading] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
-  const { language } = useLanguage();
 
-  // Only show in English mode
-  if (language !== 'en') {
-    return null;
-  }
+  useEffect(() => {
+    setRate(getExchangeRate());
+  }, [language]);
 
   const handleRefresh = async () => {
     setLoading(true);
     const newRate = await fetchExchangeRate();
     setRate(newRate);
-    setLastUpdate(new Date());
     setLoading(false);
   };
 
-  useEffect(() => {
-    setRate(getExchangeRate());
-  }, []);
+  // Only show in English mode
+  if (language !== 'en') {
+    return null;
+  }
 
   return (
     <div className="flex items-center gap-2 text-xs text-muted-foreground">
