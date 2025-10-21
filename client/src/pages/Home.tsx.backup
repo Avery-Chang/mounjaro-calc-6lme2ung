@@ -19,11 +19,8 @@ import ResultsTable from "@/components/ResultsTable";
 import { Syringe, Calculator, Info, ChevronDown, Settings } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Link } from "wouter";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export default function Home() {
-  const { t } = useLanguage();
   const [targetDose, setTargetDose] = useState<string>("5");
   const [specifications, setSpecifications] = useState(getSpecifications());
   const [isTableOpen, setIsTableOpen] = useState(false);
@@ -33,7 +30,7 @@ export default function Home() {
     return isNaN(value) || value <= 0 ? 0 : value;
   }, [targetDose]);
 
-  // 監聽 storage 變化，當{t.price}更新時重新載入
+  // 監聽 storage 變化，當價格更新時重新載入
   useEffect(() => {
     const handleStorageChange = () => {
       setSpecifications(getSpecifications());
@@ -67,26 +64,23 @@ export default function Home() {
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="container py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 md:gap-3 flex-1">
+            <div className="flex items-center gap-3">
               <div className="p-2 bg-primary/10 rounded-lg">
                 <Syringe className="w-8 h-8 text-primary" />
               </div>
               <div>
-                <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">{t.appTitle}</h1>
-                <p className="text-xs md:text-sm text-muted-foreground hidden sm:block">
-                  {t.appSubtitle}
+                <h1 className="text-3xl font-bold text-gray-900">猛健樂劑量成本計算器</h1>
+                <p className="text-sm text-muted-foreground">
+                  Mounjaro (Tirzepatide) Cost Calculator - 以 0.1mL 為最小單位精確計算
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <LanguageSwitcher />
-              <Link href="/settings">
-                <Button variant="outline" className="gap-2">
-                  <Settings className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t.priceSettings}</span>
-                </Button>
-              </Link>
-            </div>
+            <Link href="/settings">
+              <Button variant="outline" className="gap-2">
+                <Settings className="w-4 h-4" />
+                價格設定
+              </Button>
+            </Link>
           </div>
         </div>
       </header>
@@ -99,16 +93,16 @@ export default function Home() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Calculator className="w-5 h-5" />
-                {t.inputTitle}
+                輸入目標劑量
               </CardTitle>
               <CardDescription>
-                {t.inputDescription}
+                請輸入您需要的猛健樂劑量（毫克），系統將自動計算最經濟的購買方案
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="max-w-md">
                 <Label htmlFor="targetDose" className="text-base">
-                  {t.targetDoseLabel}
+                  目標劑量 (mg)
                 </Label>
                 <Input
                   id="targetDose"
@@ -121,7 +115,7 @@ export default function Home() {
                   placeholder="例如：5"
                 />
                 <p className="text-sm text-muted-foreground mt-2">
-                  {t.commonDoses}
+                  常見劑量：2.5mg、5mg、7.5mg、10mg、12.5mg、15mg
                 </p>
               </div>
             </CardContent>
@@ -130,9 +124,11 @@ export default function Home() {
           {/* Info Alert */}
           <Alert>
             <Info className="h-4 w-4" />
-            <AlertTitle>{t.calculationTitle}</AlertTitle>
+            <AlertTitle>計算說明</AlertTitle>
             <AlertDescription>
-              {t.calculationDescription}
+              本計算器以 <strong>0.1mL 為最小計量單位</strong>，根據 2025 年 10 月 1 日後的價格進行計算。
+              每支筆的可用容量為 2.4mL，標準注射量為 0.6mL。系統會自動比較所有規格，
+              找出總成本最低且浪費最少的最佳方案。
             </AlertDescription>
           </Alert>
 
@@ -145,18 +141,18 @@ export default function Home() {
               {/* Charts and Table */}
               <Tabs defaultValue="comparison" className="w-full">
                 <TabsList className="grid w-full grid-cols-4">
-                  <TabsTrigger value="comparison">{t.tabComparison}</TabsTrigger>
-                  <TabsTrigger value="permg">{t.tabPerMg}</TabsTrigger>
-                  <TabsTrigger value="per01ml">{t.tabPer01ml}</TabsTrigger>
-                  <TabsTrigger value="table">{t.tabDetails}</TabsTrigger>
+                  <TabsTrigger value="comparison">規格比較</TabsTrigger>
+                  <TabsTrigger value="permg">每 mg 成本</TabsTrigger>
+                  <TabsTrigger value="per01ml">每 0.1mL 成本</TabsTrigger>
+                  <TabsTrigger value="table">詳細數據</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="comparison" className="mt-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>{t.chartComparisonTitle}</CardTitle>
+                      <CardTitle>規格比較分析</CardTitle>
                       <CardDescription>
-                        {t.chartComparisonDesc.replace('{targetMg}', targetMg.toString())}
+                        比較各規格的每 mg 成本，滑鼠移到圖表上可查看該規格每支筆 2.4mL 可施打 {targetMg}mg 的次數。
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -168,9 +164,9 @@ export default function Home() {
                 <TabsContent value="per01ml" className="mt-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>{t.chartPer01mlTitle}</CardTitle>
+                      <CardTitle>每 0.1mL 成本比較</CardTitle>
                       <CardDescription>
-                        {t.chartPer01mlDesc}
+                        比較不同規格的每 0.1mL 單位成本，幫助您了解不同規格的容量成本差異。
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -182,9 +178,9 @@ export default function Home() {
                 <TabsContent value="permg" className="mt-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>{t.chartPerMgTitle}</CardTitle>
+                      <CardTitle>每 mg 成本比較</CardTitle>
                       <CardDescription>
-                        {t.chartPerMgDesc}
+                        比較不同規格的每毫克成本效益，幫助您找到最經濟的購買選擇。
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -196,9 +192,9 @@ export default function Home() {
                 <TabsContent value="table" className="mt-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>{t.chartDetailsTitle}</CardTitle>
+                      <CardTitle>完整計算結果</CardTitle>
                       <CardDescription>
-                        {t.chartDetailsDesc}
+                        所有規格的詳細成本分析數據，按總成本由低至高排序
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -215,9 +211,9 @@ export default function Home() {
                     <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
                       <div className="flex items-center justify-between">
                         <div>
-                          <CardTitle>{t.specOverviewTitle}</CardTitle>
+                          <CardTitle>規格價格總覽</CardTitle>
                           <CardDescription>
-                            {t.specOverviewDesc}
+                            查看所有猛健樂規格的詳細資訊與當前價格
                           </CardDescription>
                         </div>
                         <ChevronDown
@@ -234,13 +230,13 @@ export default function Home() {
                         <table className="w-full min-w-[900px]">
                           <thead className="bg-muted/50">
                             <tr>
-                              <th className="px-4 py-3 text-left font-medium w-[140px]">{t.specLabel}</th>
-                              <th className="px-4 py-3 text-right font-medium w-[100px]">{t.perPenContent}</th>
-                              <th className="px-4 py-3 text-right font-medium w-[100px]">{t.availableVolume}</th>
-                              <th className="px-4 py-3 text-right font-medium w-[110px]">{t.per01mlContent}</th>
-                              <th className="px-4 py-3 text-right font-medium w-[120px]">{t.price}</th>
-                              <th className="px-4 py-3 text-right font-medium w-[110px]">每 0.1mL<br />{t.price}</th>
-                              <th className="px-4 py-3 text-right font-medium w-[110px]">每 mg<br />{t.price}</th>
+                              <th className="px-4 py-3 text-left font-medium w-[140px]">規格</th>
+                              <th className="px-4 py-3 text-right font-medium w-[100px]">每支筆<br />含量</th>
+                              <th className="px-4 py-3 text-right font-medium w-[100px]">可用<br />容量</th>
+                              <th className="px-4 py-3 text-right font-medium w-[110px]">每 0.1mL<br />含量</th>
+                              <th className="px-4 py-3 text-right font-medium w-[120px]">價格</th>
+                              <th className="px-4 py-3 text-right font-medium w-[110px]">每 0.1mL<br />價格</th>
+                              <th className="px-4 py-3 text-right font-medium w-[110px]">每 mg<br />價格</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -276,7 +272,7 @@ export default function Home() {
                         <Link href="/settings">
                           <Button variant="outline" size="sm" className="gap-2">
                             <Settings className="w-4 h-4" />
-                            調整{t.specLabel}{t.price}
+                            調整規格價格
                           </Button>
                         </Link>
                       </div>
@@ -291,7 +287,7 @@ export default function Home() {
             <Card className="border-dashed">
               <CardContent className="flex flex-col items-center justify-center py-12 text-center">
                 <Calculator className="w-16 h-16 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-semibold mb-2">請{t.inputTitle}</h3>
+                <h3 className="text-lg font-semibold mb-2">請輸入目標劑量</h3>
                 <p className="text-muted-foreground max-w-md">
                   在上方輸入框中輸入您需要的猛健樂劑量（毫克），系統將立即為您計算最經濟的購買方案。
                 </p>
@@ -305,7 +301,7 @@ export default function Home() {
       <footer className="border-t bg-white/80 backdrop-blur-sm mt-12">
         <div className="container py-6 text-center text-sm text-muted-foreground">
           <p>
-            本計算器僅供參考，實際用藥請遵循醫師處方。{t.price}以 2025 年 10 月 1 日後為準。
+            本計算器僅供參考，實際用藥請遵循醫師處方。價格以 2025 年 10 月 1 日後為準。
           </p>
         </div>
       </footer>
