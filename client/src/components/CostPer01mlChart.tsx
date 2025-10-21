@@ -1,5 +1,6 @@
 import { CalculationResult } from "@/lib/calculator";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { convertPrice } from "@/lib/currency";
 import {
   Bar,
   BarChart,
@@ -27,17 +28,18 @@ const MOUNJARO_COLORS: Record<string, string> = {
 };
 
 export default function CostPer01mlChart({ results }: CostPer01mlChartProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   if (results.length === 0) return null;
 
   const chartData = results.map((result, index) => {
     // 計算每 0.1mL 成本 = 總價格 / (2.4mL / 0.1mL) = 總價格 / 24
     const costPer01ml = result.specification.price / 24;
+    const convertedCost = convertPrice(costPer01ml, language);
     
     return {
       name: result.specification.label,
-      cost: parseFloat(costPer01ml.toFixed(2)),
+      cost: parseFloat(convertedCost.toFixed(2)),
       isBest: index === 0,
       color: MOUNJARO_COLORS[result.specification.label] || "#8B5CF6",
     };
@@ -77,7 +79,7 @@ export default function CostPer01mlChart({ results }: CostPer01mlChartProps) {
                 return (
                   <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
                     <p className="font-semibold mb-2">{t.specification}: {label}</p>
-                    <p className="text-sm">{t.per01mlCostLabel}: {t.ntd} {data.cost.toFixed(2)}</p>
+                    <p className="text-sm">{t.per01mlCostLabel}: {t.currencySymbol} {data.cost.toFixed(2)}</p>
                   </div>
                 );
               }

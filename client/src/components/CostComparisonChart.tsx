@@ -1,5 +1,6 @@
 import { CalculationResult } from "@/lib/calculator";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { convertPrice } from "@/lib/currency";
 import {
   Bar,
   BarChart,
@@ -31,7 +32,7 @@ export default function CostComparisonChart({
   results,
   targetMg,
 }: CostComparisonChartProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   if (results.length === 0) return null;
 
@@ -39,10 +40,11 @@ export default function CostComparisonChart({
   const chartData = results.map((result) => {
     const volumePerDose = result.requiredUnits * 0.1; // 每次施打需要的 mL
     const dosesPerPen = 2.4 / volumePerDose; // 每支筆可施打次數
+    const convertedCostPerMg = convertPrice(result.costPerMg, language);
     
     return {
       name: result.specification.label,
-      costPerMg: parseFloat(result.costPerMg.toFixed(2)),
+      costPerMg: parseFloat(convertedCostPerMg.toFixed(2)),
       doses: parseFloat(dosesPerPen.toFixed(2)),
       color: MOUNJARO_COLORS[result.specification.label] || "#8B5CF6",
     };
@@ -82,7 +84,7 @@ export default function CostComparisonChart({
                 return (
                   <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
                     <p className="font-semibold mb-2">{t.specification}: {label}</p>
-                    <p className="text-sm">{t.perMgCostLabel}: {t.ntd} {data.costPerMg.toFixed(2)}</p>
+                    <p className="text-sm">{t.perMgCostLabel}: {t.currencySymbol} {data.costPerMg.toFixed(2)}</p>
                     <p className="text-sm text-muted-foreground">{t.injectionTimesLabel}: {data.doses.toFixed(2)} {t.times}</p>
                   </div>
                 );

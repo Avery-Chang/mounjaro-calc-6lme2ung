@@ -1,5 +1,6 @@
 import { CalculationResult } from "@/lib/calculator";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { convertPrice } from "@/lib/currency";
 import {
   Bar,
   BarChart,
@@ -27,13 +28,13 @@ const MOUNJARO_COLORS: Record<string, string> = {
 };
 
 export default function CostPerMgChart({ results }: CostPerMgChartProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   if (results.length === 0) return null;
 
   const chartData = results.map((result, index) => ({
     name: result.specification.label,
-    costPerMg: result.costPerMg,
+    costPerMg: convertPrice(result.costPerMg, language),
     isBest: index === 0,
     color: MOUNJARO_COLORS[result.specification.label] || "#8B5CF6",
   }));
@@ -72,7 +73,7 @@ export default function CostPerMgChart({ results }: CostPerMgChartProps) {
                 return (
                   <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
                     <p className="font-semibold mb-2">{t.specification}: {label}</p>
-                    <p className="text-sm">{t.perMgCostLabel}: {t.ntd} {data.costPerMg.toFixed(2)}</p>
+                    <p className="text-sm">{t.perMgCostLabel}: {t.currencySymbol} {data.costPerMg.toFixed(2)}</p>
                   </div>
                 );
               }

@@ -1,5 +1,9 @@
 export type Language = 'zh-TW' | 'en';
 
+// Exchange rate: 1 USD = 30.6 TWD (based on current bank rates)
+export const USD_TO_TWD_RATE = 30.6;
+export const TWD_TO_USD_RATE = 1 / USD_TO_TWD_RATE;
+
 export interface Translations {
   // Header
   appTitle: string;
@@ -82,7 +86,8 @@ export interface Translations {
   // Units
   mg: string;
   ml: string;
-  ntd: string;
+  currency: string;
+  currencySymbol: string;
   times: string;
   units: string;
   
@@ -177,7 +182,8 @@ export const translations: Record<Language, Translations> = {
     // Units
     mg: 'mg',
     ml: 'mL',
-    ntd: 'NT$',
+    currency: 'NT$',
+    currencySymbol: 'NT$',
     times: '次',
     units: '個',
     
@@ -270,7 +276,8 @@ export const translations: Record<Language, Translations> = {
     // Units
     mg: 'mg',
     ml: 'mL',
-    ntd: 'NT$',
+    currency: 'USD',
+    currencySymbol: '$',
     times: 'times',
     units: 'units',
     

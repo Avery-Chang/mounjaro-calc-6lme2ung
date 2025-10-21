@@ -130,7 +130,7 @@ export default function Settings() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Label htmlFor={`price-${spec.label}`} className="whitespace-nowrap">
-                      {t.price} ({t.ntd})
+                      {t.price} ({t.currencySymbol})
                     </Label>
                     <Input
                       id={`price-${spec.label}`}

@@ -21,9 +21,10 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Link } from "wouter";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { convertPrice } from "@/lib/currency";
 
 export default function Home() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [targetDose, setTargetDose] = useState<string>("5");
   const [specifications, setSpecifications] = useState(getSpecifications());
   const [isTableOpen, setIsTableOpen] = useState(false);
@@ -273,13 +274,13 @@ export default function Home() {
                                     {spec.mgPer01ml.toFixed(2)} mg
                                   </td>
                                   <td className="p-4 align-middle text-right font-semibold">
-                                    NT$ {spec.price.toLocaleString()}
+                                    {t.currencySymbol} {Math.round(convertPrice(spec.price, language)).toLocaleString()}
                                   </td>
                                   <td className="p-4 align-middle text-right">
-                                    NT$ {(spec.price / 24).toFixed(2)}
+                                    {t.currencySymbol} {convertPrice(spec.price / 24, language).toFixed(2)}
                                   </td>
                                   <td className="p-4 align-middle text-right">
-                                    NT$ {(spec.price / spec.totalMg).toFixed(2)}
+                                    {t.currencySymbol} {convertPrice(spec.price / spec.totalMg, language).toFixed(2)}
                                   </td>
                                 </tr>
                               );

@@ -8,12 +8,15 @@ import {
 } from "@/components/ui/table";
 import { CalculationResult } from "@/lib/calculator";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { convertPrice } from "@/lib/currency";
 
 interface ResultsTableProps {
   results: CalculationResult[];
 }
 
 export default function ResultsTable({ results }: ResultsTableProps) {
+  const { t, language } = useLanguage();
   if (results.length === 0) return null;
 
   return (
@@ -21,12 +24,12 @@ export default function ResultsTable({ results }: ResultsTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>規格</TableHead>
-            <TableHead className="text-right">需要單位數</TableHead>
-            <TableHead className="text-right">實際成本</TableHead>
-            <TableHead className="text-right">每 mg 成本</TableHead>
-            <TableHead className="text-right">每 0.1mL 成本</TableHead>
-            <TableHead className="text-right">每 0.1mL 含量</TableHead>
+            <TableHead>{t.specification}</TableHead>
+            <TableHead className="text-right">{t.requiredUnits}</TableHead>
+            <TableHead className="text-right">{t.totalCost}</TableHead>
+            <TableHead className="text-right">{t.perMgCost}</TableHead>
+            <TableHead className="text-right">{t.wasteVolume}</TableHead>
+            <TableHead className="text-right">{t.per01mlContent}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -37,22 +40,22 @@ export default function ResultsTable({ results }: ResultsTableProps) {
                   {result.specification.label}
                   {index === 0 && (
                     <Badge variant="default" className="ml-2">
-                      最便宜
+                      {language === 'zh-TW' ? '最便宜' : 'Best Value'}
                     </Badge>
                   )}
                 </div>
               </TableCell>
               <TableCell className="text-right">
-                {result.requiredUnits.toFixed(2)} 個
+                {result.requiredUnits.toFixed(2)} {t.units}
               </TableCell>
               <TableCell className="text-right font-semibold">
-                NT$ {Math.round(result.actualCost).toLocaleString()}
+                {t.currencySymbol} {Math.round(convertPrice(result.actualCost, language)).toLocaleString()}
               </TableCell>
               <TableCell className="text-right">
-                NT$ {result.costPerMg.toFixed(2)}
+                {t.currencySymbol} {convertPrice(result.costPerMg, language).toFixed(2)}
               </TableCell>
               <TableCell className="text-right">
-                NT$ {result.costPer01ml.toFixed(2)}
+                {t.currencySymbol} {convertPrice(result.costPer01ml, language).toFixed(2)}
               </TableCell>
               <TableCell className="text-right">
                 {result.specification.mgPer01ml.toFixed(2)} mg

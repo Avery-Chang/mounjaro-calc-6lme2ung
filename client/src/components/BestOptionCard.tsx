@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CalculationResult } from "@/lib/calculator";
 import { CheckCircle2, Lightbulb } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { convertPrice } from "@/lib/currency";
 
 interface BestOptionCardProps {
   result: CalculationResult;
@@ -9,8 +10,13 @@ interface BestOptionCardProps {
 }
 
 export default function BestOptionCard({ result, targetMg }: BestOptionCardProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const volumeMl = (result.requiredUnits * 0.1).toFixed(2);
+  
+  // Convert prices based on language
+  const actualCost = convertPrice(result.actualCost, language);
+  const costPerMg = convertPrice(result.costPerMg, language);
+  const costPer01ml = convertPrice(result.costPer01ml, language);
 
   return (
     <Card className="border-2 border-primary/50 bg-gradient-to-br from-primary/5 to-primary/10">
@@ -30,7 +36,7 @@ export default function BestOptionCard({ result, targetMg }: BestOptionCardProps
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">{t.actualCost}</p>
             <p className="text-2xl font-bold text-primary leading-tight">
-              NT$ {Math.round(result.actualCost).toLocaleString()}
+              {t.currencySymbol} {Math.round(actualCost).toLocaleString()}
             </p>
           </div>
           <div className="space-y-2">
@@ -54,7 +60,7 @@ export default function BestOptionCard({ result, targetMg }: BestOptionCardProps
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">{t.perMgCost}</p>
             <p className="text-xl font-semibold leading-tight">
-              NT$ {result.costPerMg.toFixed(2)}
+              {t.currencySymbol} {costPerMg.toFixed(2)}
             </p>
           </div>
         </div>
@@ -72,7 +78,7 @@ export default function BestOptionCard({ result, targetMg }: BestOptionCardProps
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">{t.wasteVolume}</p>
               <p className="text-xl font-semibold leading-tight">
-                NT$ {result.costPer01ml.toFixed(2)}
+                {t.currencySymbol} {costPer01ml.toFixed(2)}
               </p>
             </div>
             <div className="space-y-2">
