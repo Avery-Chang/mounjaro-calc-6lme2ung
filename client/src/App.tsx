@@ -7,6 +7,8 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import Home from "./pages/Home";
 import Settings from "./pages/Settings";
+import { useEffect } from "react";
+import { fetchExchangeRate } from "./lib/currency";
 
 function Router() {
   return (
@@ -26,6 +28,17 @@ function Router() {
 // - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
 
 function App() {
+  // Fetch exchange rate on app initialization
+  useEffect(() => {
+    fetchExchangeRate();
+    // Refresh exchange rate every hour
+    const interval = setInterval(() => {
+      fetchExchangeRate();
+    }, 3600000); // 1 hour
+    
+    return () => clearInterval(interval);
+  }, []);
+  
   return (
     <ErrorBoundary>
       <LanguageProvider>

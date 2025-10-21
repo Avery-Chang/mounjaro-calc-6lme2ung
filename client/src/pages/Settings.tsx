@@ -10,6 +10,7 @@ import { Link } from "wouter";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ExchangeRateDisplay } from "@/components/ExchangeRateDisplay";
 import { convertPrice, convertToTWD } from "@/lib/currency";
 
 export default function Settings() {
@@ -88,7 +89,8 @@ export default function Settings() {
               </div>
             </Link>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
+            <ExchangeRateDisplay />
             <LanguageSwitcher />
             <Link href="/">
               <Button variant="outline">
