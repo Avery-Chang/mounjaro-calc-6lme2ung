@@ -246,47 +246,49 @@ export default function Home() {
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <CardContent>
-                      <div className="rounded-md border overflow-x-auto">
-                        <table className="w-full min-w-[900px]">
-                          <thead className="bg-muted/50">
-                            <tr>
-                              <th className="px-4 py-3 text-left font-medium w-[140px]">{t.specLabel}</th>
-                              <th className="px-4 py-3 text-right font-medium w-[100px]">{t.perPenContent}</th>
-                              <th className="px-4 py-3 text-right font-medium w-[100px]">{t.availableVolume}</th>
-                              <th className="px-4 py-3 text-right font-medium w-[110px]">{t.per01mlContent}</th>
-                              <th className="px-4 py-3 text-right font-medium w-[120px]">{t.price}</th>
-                              <th className="px-4 py-3 text-right font-medium w-[110px]">每 0.1mL<br />{t.price}</th>
-                              <th className="px-4 py-3 text-right font-medium w-[110px]">每 mg<br />{t.price}</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {specifications.map((spec, index) => {
-                              const isBest = bestOption && spec.label === bestOption.specification.label;
-                              return (
-                              <tr
-                                key={spec.label}
-                                className={isBest ? "bg-primary/10 border-l-4 border-primary" : (index % 2 === 0 ? "bg-background" : "bg-muted/20")}
-                              >
-                                <td className="px-4 py-3 font-medium">{spec.label}</td>
-                                <td className="px-4 py-3 text-right">{spec.totalMg} mg</td>
-                                <td className="px-4 py-3 text-right">{spec.totalMl} mL</td>
-                                <td className="px-4 py-3 text-right">
-                                  {spec.mgPer01ml.toFixed(2)} mg
-                                </td>
-                                <td className="px-4 py-3 text-right font-semibold">
-                                  NT$ {spec.price.toLocaleString()}
-                                </td>
-                                <td className="px-4 py-3 text-right">
-                                  NT$ {(spec.price / 24).toFixed(2)}
-                                </td>
-                                <td className="px-4 py-3 text-right">
-                                  NT$ {(spec.price / spec.totalMg).toFixed(2)}
-                                </td>
+                      <div className="rounded-md border">
+                        <div className="overflow-x-auto">
+                          <table className="w-full min-w-[900px]">
+                            <thead>
+                              <tr className="border-b bg-muted/50">
+                                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-[140px]">{t.specLabel}</th>
+                                <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[100px]">{t.perPenContent}</th>
+                                <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[100px]">{t.availableVolume}</th>
+                                <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[110px]">{t.per01mlContent}</th>
+                                <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[120px]">{t.price}</th>
+                                <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[110px]">每 0.1mL {t.price}</th>
+                                <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground w-[110px]">每 mg {t.price}</th>
                               </tr>
-                            );
-                            })}
-                          </tbody>
-                        </table>
+                            </thead>
+                            <tbody>
+                              {specifications.map((spec, index) => {
+                                const isBest = bestOption && spec.label === bestOption.specification.label;
+                                return (
+                                <tr
+                                  key={spec.label}
+                                  className={isBest ? "border-b bg-primary/10 border-l-4 border-l-primary" : "border-b transition-colors hover:bg-muted/50"}
+                                >
+                                  <td className="p-4 align-middle font-medium">{spec.label}</td>
+                                  <td className="p-4 align-middle text-right">{spec.totalMg} mg</td>
+                                  <td className="p-4 align-middle text-right">{spec.totalMl} mL</td>
+                                  <td className="p-4 align-middle text-right">
+                                    {spec.mgPer01ml.toFixed(2)} mg
+                                  </td>
+                                  <td className="p-4 align-middle text-right font-semibold">
+                                    NT$ {spec.price.toLocaleString()}
+                                  </td>
+                                  <td className="p-4 align-middle text-right">
+                                    NT$ {(spec.price / 24).toFixed(2)}
+                                  </td>
+                                  <td className="p-4 align-middle text-right">
+                                    NT$ {(spec.price / spec.totalMg).toFixed(2)}
+                                  </td>
+                                </tr>
+                              );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                       <div className="mt-4 flex justify-end">
                         <Link href="/settings">
