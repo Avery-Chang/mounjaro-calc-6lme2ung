@@ -82,7 +82,7 @@ export default function Settings() {
           <div className="flex items-center gap-2">
             <Link href="/">
               <div className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
-                <Syringe className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+                <img src="/logo.png" alt="Mounjaro Calculator Logo" className="w-8 h-8 md:w-10 md:h-10" />
                 <h1 className="text-lg md:text-xl font-bold">{t.appTitle}</h1>
               </div>
             </Link>

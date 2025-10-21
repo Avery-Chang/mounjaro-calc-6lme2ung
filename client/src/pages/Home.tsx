@@ -68,9 +68,7 @@ export default function Home() {
         <div className="container py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 md:gap-3 flex-1">
-              <div className="p-2 bg-primary/10 rounded-lg">
-                <Syringe className="w-8 h-8 text-primary" />
-              </div>
+              <img src="/logo.png" alt="Mounjaro Calculator Logo" className="w-10 h-10 md:w-12 md:h-12" />
               <div>
                 <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">{t.appTitle}</h1>
                 <p className="text-xs md:text-sm text-muted-foreground hidden sm:block">
