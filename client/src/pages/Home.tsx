@@ -30,7 +30,7 @@ export default function Home() {
 
   const targetMg = useMemo(() => {
     const value = parseFloat(targetDose);
-    return isNaN(value) || value <= 0 ? 0 : value;
+    return isNaN(value) || value < 1 || value > 30 ? 0 : value;
   }, [targetDose]);
 
   // 監聽 storage 變化，當{t.price}更新時重新載入
@@ -113,10 +113,26 @@ export default function Home() {
                 <Input
                   id="targetDose"
                   type="number"
-                  min="0"
+                  min="1"
+                  max="30"
                   step="0.1"
                   value={targetDose}
-                  onChange={(e) => setTargetDose(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    // 允許空字串
+                    if (value === '') {
+                      setTargetDose(value);
+                      return;
+                    }
+                    const numValue = parseFloat(value);
+                    // 允許部分輸入，但限制在 1-30 範圍內
+                    if (!isNaN(numValue) && numValue >= 1 && numValue <= 30) {
+                      setTargetDose(value);
+                    } else if (!isNaN(numValue) && numValue > 30) {
+                      // 如果超過 30，設置為 30
+                      setTargetDose('30');
+                    }
+                  }}
                   className="mt-2 text-lg h-12"
                   placeholder="例如：5"
                 />

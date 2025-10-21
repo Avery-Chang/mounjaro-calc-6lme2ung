@@ -31,11 +31,26 @@ export default function Settings() {
   }, []);
 
   const handlePriceChange = (label: string, value: string) => {
+    // 允許空字串以便用戶可以清除輸入
+    if (value === '') {
+      setPrices((prev) => ({
+        ...prev,
+        [label]: '' as any,
+      }));
+      return;
+    }
     const numValue = parseFloat(value);
-    if (!isNaN(numValue) && numValue >= 0) {
+    // 嚴格限制 1-50000 NT$，確保輸入為受控組件
+    if (!isNaN(numValue) && numValue >= 1 && numValue <= 50000) {
       setPrices((prev) => ({
         ...prev,
         [label]: numValue,
+      }));
+    } else if (!isNaN(numValue) && numValue > 50000) {
+      // 如果超過最大值，設置為最大值
+      setPrices((prev) => ({
+        ...prev,
+        [label]: 50000,
       }));
     }
   };
@@ -54,6 +69,8 @@ export default function Settings() {
     });
     setPrices(defaultPrices);
     localStorage.removeItem("mounjaro-prices");
+    // 觸發自定義事件通知其他頁面
+    window.dispatchEvent(new Event("pricesUpdated"));
     toast.success(t.settingsReset);
   };
 
@@ -118,9 +135,10 @@ export default function Settings() {
                     <Input
                       id={`price-${spec.label}`}
                       type="number"
-                      min="0"
+                      min="1"
+                      max="50000"
                       step="100"
-                      value={prices[spec.label] || spec.price}
+                      value={prices[spec.label] !== undefined ? prices[spec.label] : spec.price}
                       onChange={(e) => handlePriceChange(spec.label, e.target.value)}
                       className="text-right"
                     />
