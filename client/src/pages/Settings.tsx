@@ -82,7 +82,7 @@ export default function Settings() {
           <div className="flex items-center gap-2">
             <Link href="/">
               <div className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer">
-                <img src="/logo.png" alt="Mounjaro Calculator Logo" className="w-12 h-12 md:w-14 md:h-14" />
+                <img src="/logo.png" alt="Mounjaro Calculator Logo" className="w-16 h-16 md:w-20 md:h-20" />
                 <h1 className="text-lg md:text-xl font-bold">{t.appTitle}</h1>
               </div>
             </Link>
