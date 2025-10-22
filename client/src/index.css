@@ -170,3 +170,17 @@
     }
   }
 }
+
+/* Hide Manus branding for paid users */
+[data-manus-branding],
+a[href*="manus.im"],
+button[aria-label*="Made with"],
+div:has(> a[href*="manus.im"]),
+*[class*="manus-branding"],
+*[id*="manus-branding"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
